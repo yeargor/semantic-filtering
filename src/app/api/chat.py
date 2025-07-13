@@ -2,9 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from src.app.api.dto.message import MessageDTO, MessageResultDTO
+from src.app.application.common.dto.message.message import MessageDTO, MessageResultDTO
 from src.app.application.graph import invoke_graph
-from src.app.application.models.message import Message
+from src.app.application.models.chat.message import Message
 from src.app.application.protocols.graph import CompiledGraph
 
 chat_router = APIRouter()

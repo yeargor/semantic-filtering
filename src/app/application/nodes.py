@@ -1,16 +1,16 @@
 from typing import Dict, Any
 from langchain_core.prompts import PromptTemplate
 
-from src.app.application.models.prompt import Prompt
-from src.app.application.models.state import State
-from src.app.application.protocols.database import DatabaseGateway
+from src.app.application.models.chat.prompt import Prompt
+from src.app.application.models.chat.state import State
+from src.app.application.protocols.database import AbstractChromaRecipeGateway
 from src.app.application.protocols.llm import LLM
 
 
 class Nodes:
     def __init__(
             self,
-            database: DatabaseGateway,
+            database: AbstractChromaRecipeGateway,
             llm: LLM
     ):
         self.database = database
