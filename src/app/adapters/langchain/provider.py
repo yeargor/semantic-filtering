@@ -1,42 +1,40 @@
 from chromadb import Embeddings
 from dishka import Provider, provide, Scope
+from langchain_chroma import Chroma
 from langchain_google_vertexai import ChatVertexAI
 from langchain_huggingface import HuggingFaceEmbeddings
-from langgraph.constants import START, END
-from langgraph.graph import StateGraph
+from langchain.retrievers.self_query.base import SelfQueryRetriever
 
-from src.app.application.models.chat.state import State
-from src.app.application.nodes import Nodes
-from src.app.application.protocols.database import AbstractChromaRecipeGateway
-from src.app.application.protocols.graph import CompiledGraph
+from src.app.adapters.langchain.recipe_meta import get_document_content_description, \
+    get_metadata_field_info
 from src.app.application.protocols.llm import LLM
+from src.app.application.protocols.retriever import AbstractRecipeRetriever
+
 
 class LangChainProvider(Provider):
-    @provide(scope=Scope.APP)
-    def get_llm(self) -> LLM:
+    @provide(scope=Scope.APP, provides=LLM)
+    def get_llm(self) -> ChatVertexAI:
         return ChatVertexAI(
             model="gemini-2.5-flash",
             project="elemental-kite-456917-j6",
             location="us-central1"
         )
 
-    @provide(scope=Scope.APP)
-    def get_embeddings(self) -> Embeddings:
+    @provide(scope=Scope.APP, provides=AbstractRecipeRetriever)
+    def get_retriever(
+            self,
+            llm: LLM,
+            vector_store: Chroma,
+    ) -> SelfQueryRetriever:
+        document_content_description = get_document_content_description()
+        metadata_field_info = get_metadata_field_info()
+        return SelfQueryRetriever.from_llm(
+            llm,
+            vector_store,
+            document_content_description,
+            metadata_field_info
+        )
+
+    @provide(scope=Scope.APP, provides=Embeddings)
+    def get_embeddings(self) -> HuggingFaceEmbeddings:
         return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-
-    @provide(scope=Scope.APP)
-    def get_nodes(self, gateway: AbstractChromaRecipeGateway, llm: LLM) -> Nodes:
-        return Nodes(gateway, llm)
-
-    @provide(scope=Scope.APP)
-    def get_compiled_graph(self, nodes: Nodes) -> CompiledGraph:
-        graph_builder = StateGraph(State)
-        graph_builder.add_node("retrieve", nodes.retrieve)
-        graph_builder.add_node("generate", nodes.generate)
-
-        graph_builder.add_edge(START, "retrieve")
-        graph_builder.add_edge("retrieve", "generate")
-        graph_builder.add_edge("generate", END)
-
-        compiled_graph = graph_builder.compile()
-        return compiled_graph

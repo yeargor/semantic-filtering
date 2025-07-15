@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List, Any
 
+from src.app.application.common.dto.recipe.recipe import RecipeFilter
 from src.app.application.models.recipe import Recipe
 
 class AbstractChromaRecipeGateway(ABC):
     @abstractmethod
-    def similarity_search(self, query: str, filter: dict[str, str]) -> List[Any]:
+    def search(self, query: str) -> List[Any]:
         pass
 
     @abstractmethod
@@ -27,6 +28,10 @@ class AbstractSqlRecipeGateway(ABC):
 
     @abstractmethod
     def find_recipe_by_id(self, recipe_id: str) -> Recipe:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_all(self, filters: RecipeFilter):
         raise NotImplementedError
 
     @abstractmethod
