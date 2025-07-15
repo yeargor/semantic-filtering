@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Any
-
+from typing import List
 from pydantic import BaseModel
 
 from src.app.application.common.enums import OperationType
@@ -22,6 +21,10 @@ class RecipeUpdateDto(BaseModel):
     cooking_time: int | None = None
     difficulty: Difficulty | None = None
     cuisine: Cuisine | None = None
+
+class RecipeFilter(BaseModel):
+    include: List[str] = []
+    exclude: List[str] = []
 
 @dataclass
 class RecipeResponse:

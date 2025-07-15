@@ -2,7 +2,7 @@ from aiokafka import AIOKafkaConsumer
 from dishka import Provider, provide, Scope
 
 from src.app.adapters.kafka.consumer import KafkaConsumer
-from src.app.application.handler import RecipeHandler
+from src.app.application.broker_handler import RecipeHandler
 from src.app.application.protocols.consumer import AbstractConsumer
 
 

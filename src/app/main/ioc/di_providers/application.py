@@ -1,6 +1,6 @@
 from dishka import Provider, provide, Scope
 
-from src.app.application.handler import RecipeHandler
+from src.app.application.broker_handler import RecipeHandler
 
 class ApplicationProvider(Provider):
     recipe_handler = provide(

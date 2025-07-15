@@ -3,7 +3,7 @@ from dishka import make_async_container
 from dishka.integrations.fastapi import setup_dishka
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from src.app.adapters.sqlalchemy_db.models import metadata_obj #!!
+from src.app.adapters.sqlalchemy_db.models import metadata_obj #!!!
 from src.app.application.protocols.consumer import AbstractConsumer
 from src.app.main.handlers import init_handlers
 from src.app.main.ioc.ioc_registry import get_providers

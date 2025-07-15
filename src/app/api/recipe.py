@@ -1,14 +1,16 @@
 from uuid import UUID
-from typing import Annotated
+from typing import Annotated, List
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Query
 
+from src.app.application.common.dto.message.message import MessageDTO
 from src.app.application.common.dto.recipe.recipe import RecipeDto, RecipeCreateResponse, RecipeResponse, \
-    RecipeUpdateDto
-from src.app.application.protocols.database import AbstractSqlRecipeGateway, UoW
-from src.app.application.recipes import new_recipe, find_recipe_by_id, update_recipe, delete_recipe
+    RecipeUpdateDto, RecipeFilter
+from src.app.application.protocols.database import AbstractSqlRecipeGateway, UoW, AbstractChromaRecipeGateway
+from src.app.application.recipes import new_recipe, find_recipe_by_id, update_recipe, delete_recipe, \
+    get_filtered_recipes, search_recipe
 
 recipe_router = APIRouter(prefix="/recipe")
 
@@ -25,6 +27,22 @@ def create(
         uow
     )
     return RecipeCreateResponse(recipe_id)
+
+@recipe_router.get('')
+@inject
+def get_all(
+    gateway: FromDishka[AbstractSqlRecipeGateway],
+    filters: Annotated[RecipeFilter, Query()]
+) -> List[RecipeResponse]:
+    return get_filtered_recipes(filters, gateway)
+
+@recipe_router.post('/search')
+@inject
+def semantic_search(
+        message: MessageDTO,
+        gateway: FromDishka[AbstractChromaRecipeGateway],
+) -> List[RecipeResponse]:
+    return search_recipe(message.data, gateway)
 
 @recipe_router.get('/{recipe_id}')
 @inject
@@ -57,12 +75,12 @@ def update(
 @recipe_router.delete('/{recipe_id}')
 @inject
 def delete(
-    recipe_id: str,
+    recipe_id: UUID,
     gateway: FromDishka[AbstractSqlRecipeGateway],
     uow: FromDishka[UoW]
 ) -> None:
     return delete_recipe(
-        recipe_id,
+        str(recipe_id),
         gateway,
         uow
     )
