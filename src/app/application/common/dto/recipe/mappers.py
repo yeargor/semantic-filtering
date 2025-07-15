@@ -1,4 +1,4 @@
-from src.app.application.common.dto.recipe.recipe import RecipeDto, RecipeResponse, RecipeUpdateDto
+from src.app.application.common.dto.recipe.recipe import RecipeDto, RecipeResponse, RecipeUpdateDto, RecipeEvent
 from src.app.application.models.recipe import Recipe
 
 

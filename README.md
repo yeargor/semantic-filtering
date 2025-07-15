@@ -16,3 +16,6 @@ Provide following variables: \
 `GOOGLE_APPLICATION_CREDENTIALS` - path to your json file \
 `GCP_LOCATION` - us-central1(default) \
 `GCP_PROJECT` - "project_id" from json file
+
+#### 5. Run Docker-compose
+#### 6. Send Debezium json config from bootstrap..

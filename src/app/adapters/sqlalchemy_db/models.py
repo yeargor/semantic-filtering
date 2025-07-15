@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy import MetaData, Table, Column, String, ARRAY, Text, Integer
-from sqlalchemy.orm import registry, DeclarativeBase
+from sqlalchemy.orm import registry
 from sqlalchemy.dialects.postgresql import UUID, ENUM
 
 from src.app.application.models.recipe import Cuisine, Difficulty, Recipe

@@ -1,0 +1,30 @@
+{
+    "name": "postgres-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "plugin.name": "pgoutput",
+        "database.hostname": "recipe-postgres-db",
+        "database.port": "5432",
+        "database.user": "postgres",
+        "database.password": "pleasecomein",
+        "database.dbname": "recipe",
+        "database.server.name": "recipe-server",
+        "table.include.list": "public.recipe",
+        "publication.name": "dbz_recipe_publication",
+        "slot.name": "dbz_recipe_slot",
+
+        "topic.prefix": "recipe-updates",
+        "topic.creation.default.replication.factor": 1,
+        "topic.creation.default.partitions": 3,
+
+        "transforms": "outbox",
+        "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+        "transforms.outbox.collection.expand.json.payload": true,
+
+        "internal.key.converter" : "org.apache.kafka.connect.json.JsonConverter",
+        "internal.value.converter"  : "org.apache.kafka.connect.json.JsonConverter",
+        "internal.key.converter.schemas.enable":"true",
+        "internal.value.converter.schemas.enable":"true",
+        "output.schema.infer.value": "true"
+    }
+}

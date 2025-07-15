@@ -8,21 +8,17 @@ class AbstractChromaRecipeGateway(ABC):
     def similarity_search(self, query: str, filter: dict[str, str]) -> List[Any]:
         pass
 
-    # @abstractmethod
-    # def get_recipe_by_id(self, recipe_id: str) -> Recipe:
-    #     pass
-    #
-    # @abstractmethod
-    # def create_recipe(self, recipe: Recipe) -> str:
-    #     pass
-    #
-    # @abstractmethod
-    # def update_recipe(self, id, recipe: Recipe) -> Recipe:
-    #     pass
-    #
-    # @abstractmethod
-    # def delete_recipe(self, id) -> None:
-    #     pass
+    @abstractmethod
+    def create_recipe(self, recipe: Recipe) -> None:
+        pass
+
+    @abstractmethod
+    def update_recipe(self, recipe_id: str, recipe: Recipe) -> None:
+        pass
+
+    @abstractmethod
+    def delete_recipe(self, recipe_id: str) -> None:
+        pass
 
 class AbstractSqlRecipeGateway(ABC):
     @abstractmethod

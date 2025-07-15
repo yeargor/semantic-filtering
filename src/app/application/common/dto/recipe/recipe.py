@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Any
 
 from pydantic import BaseModel
 
-from src.app.application.models.recipe import Difficulty, Cuisine
+from src.app.application.common.enums import OperationType
+from src.app.application.models.recipe import Difficulty, Cuisine, Recipe
 
 
 class RecipeDto(BaseModel):
@@ -34,3 +35,9 @@ class RecipeResponse:
 @dataclass
 class RecipeCreateResponse:
     id: str
+
+@dataclass
+class RecipeEvent:
+    id: str
+    operation_type: OperationType
+    body: Recipe | None = None

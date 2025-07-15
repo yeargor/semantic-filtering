@@ -31,4 +31,3 @@ class RecipeDocument:
             content=repr(recipe),
             metadata=processed_fields
         )
-

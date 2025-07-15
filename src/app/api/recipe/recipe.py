@@ -1,6 +1,8 @@
 from uuid import UUID
 from typing import Annotated
 
+from dishka import FromDishka
+from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Depends
 
 from src.app.application.common.dto.recipe.recipe import RecipeDto, RecipeCreateResponse, RecipeResponse, \
@@ -11,10 +13,11 @@ from src.app.application.recipes import new_recipe, find_recipe_by_id, update_re
 recipe_router = APIRouter(prefix="/recipe")
 
 @recipe_router.post('')
+@inject
 def create(
         recipe_dto: RecipeDto,
-        gateway: Annotated[AbstractSqlRecipeGateway, Depends()],
-        uow: Annotated[UoW, Depends()]
+        gateway: FromDishka[AbstractSqlRecipeGateway],
+        uow: FromDishka[UoW]
 ) -> RecipeCreateResponse:
     recipe_id = new_recipe(
         recipe_dto,
@@ -24,9 +27,10 @@ def create(
     return RecipeCreateResponse(recipe_id)
 
 @recipe_router.get('/{recipe_id}')
+@inject
 def get(
         recipe_id: UUID,
-        gateway: Annotated[AbstractSqlRecipeGateway, Depends()]
+        gateway: FromDishka[AbstractSqlRecipeGateway]
 ) -> RecipeResponse:
     recipe = find_recipe_by_id(
         str(recipe_id),
@@ -35,11 +39,12 @@ def get(
     return recipe
 
 @recipe_router.patch('/{recipe_id}')
+@inject
 def update(
         recipe_id: UUID,
         recipe_request: RecipeUpdateDto,
-        gateway: Annotated[AbstractSqlRecipeGateway, Depends()],
-        uow: Annotated[UoW, Depends()]
+        gateway: FromDishka[AbstractSqlRecipeGateway],
+        uow: FromDishka[UoW]
 ) -> RecipeResponse:
     updated_recipe = update_recipe(
         str(recipe_id),
@@ -50,10 +55,11 @@ def update(
     return updated_recipe
 
 @recipe_router.delete('/{recipe_id}')
+@inject
 def delete(
     recipe_id: str,
-    gateway: Annotated[AbstractSqlRecipeGateway, Depends()],
-    uow: Annotated[UoW, Depends()]
+    gateway: FromDishka[AbstractSqlRecipeGateway],
+    uow: FromDishka[UoW]
 ) -> None:
     return delete_recipe(
         recipe_id,
