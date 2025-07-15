@@ -1,4 +1,4 @@
-from fastapi import Request, FastAPI
+from fastapi import Request
 from starlette.responses import JSONResponse
 
 from src.app.adapters.kafka.exceptions import KafkaConsumerError

@@ -2,40 +2,39 @@ import os
 from typing import Iterable
 
 from dishka import Provider, provide, Scope
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 
 from src.app.adapters.sqlalchemy_db.gateway import RecipeSqlGateway
 from src.app.application.protocols.database import UoW, AbstractSqlRecipeGateway
 
 
 class SqlAlchemyProvider(Provider):
-    @provide(scope=Scope.APP, provides=sessionmaker)
-    def get_session_maker(self) -> sessionmaker[Session]:
+    @provide(scope=Scope.APP, provides=async_sessionmaker)
+    def get_async_session_maker(self) -> async_sessionmaker[AsyncSession]:
         db_uri = os.getenv("DB_URI")
         if not db_uri:
             raise ValueError("DB_URI env variable is not set")
 
-        engine = create_engine(
+        async_engine = create_async_engine(
             db_uri,
             echo=True,
             pool_size=15,
             max_overflow=15,
             connect_args={
-                "connect_timeout": 5,
+                "command_timeout": 5,
             },
         )
-        return sessionmaker(engine, autoflush=False, expire_on_commit=False)
+        return async_sessionmaker(async_engine, autoflush=False, expire_on_commit=False)
 
-    @provide(scope=Scope.REQUEST, provides=Session)
-    def get_session(self, session_maker: sessionmaker[Session]) -> Iterable[Session]:
-         with session_maker() as session:
+    @provide(scope=Scope.REQUEST, provides=AsyncSession)
+    async def get_async_session(self, async_session_maker: async_sessionmaker[AsyncSession]) -> Iterable[AsyncSession]:
+         async with async_session_maker() as session:
             yield session
 
     @provide(scope=Scope.REQUEST, provides=UoW)
-    def get_uow_session(self, session: Session) -> Iterable[Session]:
+    def get_uow_session(self, session: AsyncSession) -> Iterable[AsyncSession]:
         return session
 
     @provide(scope=Scope.REQUEST, provides=AbstractSqlRecipeGateway)
-    def get_recipe_sql_gateway(self, session: Session) -> RecipeSqlGateway:
+    def get_recipe_sql_gateway(self, session: AsyncSession) -> RecipeSqlGateway:
         return RecipeSqlGateway(session)

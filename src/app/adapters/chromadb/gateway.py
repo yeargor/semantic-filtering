@@ -18,19 +18,19 @@ class ChromaRecipeGateway(AbstractChromaRecipeGateway):
         self.vector_store = vector_store
         self.retriever = retriever
 
-    def search(self, query: str) -> List[Recipe]:
-        documents_list = self.retriever.invoke(input=query)
+    async def search(self, query: str) -> List[Recipe]:
+        documents_list = await self.retriever.ainvoke(input=query)
         recipes = [to_recipe(doc) for doc in documents_list]
         return recipes
 
-    def create_recipe(self, recipe: Recipe):
+    async def create_recipe(self, recipe: Recipe):
         recipe_document = from_recipe(recipe)
         langchain_document = Document(
             page_content=recipe_document.content,
             metadata=recipe_document.metadata,
             id=str(recipe_document.id),
         )
-        self.vector_store.add_documents(documents=[langchain_document])
+        await self.vector_store.aadd_documents(documents=[langchain_document])
         return langchain_document.id
 
     def update_recipe(self, recipe_id: str, recipe: Recipe) -> None:

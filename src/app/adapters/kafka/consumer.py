@@ -21,7 +21,6 @@ class KafkaConsumer(AbstractConsumer):
 
     async def start(self):
         await self.consumer.start()
-        print("inner consumer started")
         self._consume_task = asyncio.create_task(self.consume())
 
     async def consume(self):
@@ -29,7 +28,7 @@ class KafkaConsumer(AbstractConsumer):
             async for message in self.consumer:
                 print(f'{message} \n')
                 recipe_event = parse_message(message)
-                self.handler.handle_recipe_update(recipe_event)
+                await self.handler.handle_recipe_update(recipe_event)
         except Exception as e:
             raise KafkaConsumerError(e) from e
 

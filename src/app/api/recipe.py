@@ -16,41 +16,41 @@ recipe_router = APIRouter(prefix="/recipe")
 
 @recipe_router.post('')
 @inject
-def create(
+async def create(
         recipe_dto: RecipeDto,
         gateway: FromDishka[AbstractSqlRecipeGateway],
         uow: FromDishka[UoW]
 ) -> RecipeCreateResponse:
-    recipe_id = new_recipe(
+    recipe_id = await new_recipe(
         recipe_dto,
         gateway,
         uow
     )
     return RecipeCreateResponse(recipe_id)
 
-@recipe_router.get('')
-@inject
-def get_all(
-    gateway: FromDishka[AbstractSqlRecipeGateway],
-    filters: Annotated[RecipeFilter, Query()]
-) -> List[RecipeResponse]:
-    return get_filtered_recipes(filters, gateway)
-
 @recipe_router.post('/search')
 @inject
-def semantic_search(
+async def semantic_search(
         message: MessageDTO,
         gateway: FromDishka[AbstractChromaRecipeGateway],
 ) -> List[RecipeResponse]:
-    return search_recipe(message.data, gateway)
+    return await search_recipe(message.data, gateway)
+
+@recipe_router.get('')
+@inject
+async def get_all(
+    gateway: FromDishka[AbstractSqlRecipeGateway],
+    filters: Annotated[RecipeFilter, Query()]
+) -> List[RecipeResponse]:
+    return await get_filtered_recipes(filters, gateway)
 
 @recipe_router.get('/{recipe_id}')
 @inject
-def get(
+async def get(
         recipe_id: UUID,
         gateway: FromDishka[AbstractSqlRecipeGateway]
 ) -> RecipeResponse:
-    recipe = find_recipe_by_id(
+    recipe = await find_recipe_by_id(
         str(recipe_id),
         gateway
     )
@@ -58,13 +58,13 @@ def get(
 
 @recipe_router.patch('/{recipe_id}')
 @inject
-def update(
+async def update(
         recipe_id: UUID,
         recipe_request: RecipeUpdateDto,
         gateway: FromDishka[AbstractSqlRecipeGateway],
         uow: FromDishka[UoW]
 ) -> RecipeResponse:
-    updated_recipe = update_recipe(
+    updated_recipe = await update_recipe(
         str(recipe_id),
         recipe_request,
         gateway,
@@ -74,12 +74,12 @@ def update(
 
 @recipe_router.delete('/{recipe_id}')
 @inject
-def delete(
+async def delete(
     recipe_id: UUID,
     gateway: FromDishka[AbstractSqlRecipeGateway],
     uow: FromDishka[UoW]
 ) -> None:
-    return delete_recipe(
+    return await delete_recipe(
         str(recipe_id),
         gateway,
         uow
