@@ -27,8 +27,7 @@ class KafkaProvider(Provider):
     async def get_kafka_consumer(self, config: ConsumerConfig) -> AIOKafkaConsumer:
         return AIOKafkaConsumer(
             *config.topics,
-            bootstrap_servers=config.bootstrap_servers,
-            auto_offset_reset="earliest"
+            bootstrap_servers=config.bootstrap_servers
         )
 
     @provide(scope=Scope.APP, provides=AbstractConsumer)

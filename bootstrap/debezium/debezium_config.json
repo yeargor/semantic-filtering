@@ -17,14 +17,16 @@
         "topic.creation.default.replication.factor": 1,
         "topic.creation.default.partitions": 3,
 
-        "transforms": "outbox",
-        "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
-        "transforms.outbox.collection.expand.json.payload": true,
+        "tombstones.on.delete":"false",
+
+        "key.converter":"org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable":"false",
+        "value.converter":"org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable":"false",
 
         "internal.key.converter" : "org.apache.kafka.connect.json.JsonConverter",
         "internal.value.converter"  : "org.apache.kafka.connect.json.JsonConverter",
-        "internal.key.converter.schemas.enable":"true",
-        "internal.value.converter.schemas.enable":"true",
-        "output.schema.infer.value": "true"
+        "internal.key.converter.schemas.enable":"false",
+        "internal.value.converter.schemas.enable":"false"
     }
 }

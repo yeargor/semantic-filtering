@@ -10,7 +10,7 @@ from src.app.tests.mocks.gateway import RecipeChromaGatewayMock
 async def test_handler_receives_create_event_recipe_created(
         kafka_producer: AIOKafkaProducer,
         kafka_consumer: KafkaConsumer,
-        chroma_gateway: RecipeChromaGatewayMock,
+        chroma_gateway_mock: RecipeChromaGatewayMock,
         recipe_handler: RecipeHandler
 ):
     test_topic = "topic"
@@ -32,6 +32,6 @@ async def test_handler_receives_create_event_recipe_created(
     msg_value_bytes = json.dumps(msg_value_data).encode('utf-8')
     await kafka_producer.send_and_wait(test_topic, msg_value_bytes, key=msg_key_bytes)
     await asyncio.sleep(2)
-    assert len(chroma_gateway.recipes) == 1
-    created_recipe = chroma_gateway.recipes[0]
+    assert len(chroma_gateway_mock.recipes) == 1
+    created_recipe = chroma_gateway_mock.recipes[0]
     assert created_recipe.title == "new_recipe"
