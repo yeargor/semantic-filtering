@@ -1,1 +1,1 @@
-pytest_plugins = ["src.app.tests.fixtures.db", "src.app.tests.fixtures.broker"]
+pytest_plugins = ["src.app.tests.fixtures.db", "src.app.tests.fixtures.broker", "src.app.tests.fixtures.chroma", "src.app.tests.fixtures.langchain"]
