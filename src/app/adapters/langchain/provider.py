@@ -1,5 +1,3 @@
-import os
-
 from chromadb import Embeddings
 from dishka import Provider, provide, Scope
 from langchain_chroma import Chroma
@@ -7,7 +5,7 @@ from langchain_google_vertexai import ChatVertexAI
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.retrievers.self_query.base import SelfQueryRetriever
 
-from src.app.adapters.langchain.config import LLMConfig
+from src.app.adapters.langchain.config import LLMConfig, load_config
 from src.app.adapters.langchain.recipe_meta import get_document_content_description, \
     get_metadata_field_info
 from src.app.application.protocols.llm import LLM
@@ -15,19 +13,13 @@ from src.app.application.protocols.retriever import AbstractRecipeRetriever
 
 
 class LangChainProvider(Provider):
-    @provide(scope=Scope.APP, provides=LLMConfig)
-    def get_config(self) -> LLMConfig:
-        return LLMConfig(
-            os.getenv("GCP_PROJECT","undefined"),
-            os.getenv("GCP_LOCATION","us-central1")
-        )
-
     @provide(scope=Scope.APP, provides=LLM)
-    def get_llm(self, config: LLMConfig) -> ChatVertexAI:
+    def get_llm(self) -> ChatVertexAI:
+        config = load_config()
         return ChatVertexAI(
             model="gemini-2.5-flash",
             project=config.project,
-            location=config.location
+            location=config.location,
         )
 
     @provide(scope=Scope.APP, provides=AbstractRecipeRetriever)
