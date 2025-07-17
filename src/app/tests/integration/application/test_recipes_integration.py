@@ -39,7 +39,7 @@ async def test_semantic_search_recipe_recipes_found(
     gateway = ChromaRecipeGateway(vector_store,get_retriever)
     for recipe in recipes:
         await gateway.create_recipe(recipe)
-    recipes = await gateway.search("only pepper and onion in ingredients")
+    recipes = await gateway.search("onion in ingredients")
     assert "onion" in recipes[0].ingredients
 
 async def test_semantic_search_recipe_recipes_filtered_correctly(
@@ -50,5 +50,5 @@ async def test_semantic_search_recipe_recipes_filtered_correctly(
     gateway = ChromaRecipeGateway(vector_store,get_retriever)
     for recipe in recipes:
         await gateway.create_recipe(recipe)
-    recipes = await gateway.search("cheese and butter in ingredients")
+    recipes = await gateway.search("without onion in ingredients")
     assert "onion" not in recipes[0].ingredients

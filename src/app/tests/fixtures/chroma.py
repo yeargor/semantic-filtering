@@ -11,7 +11,7 @@ from src.app.tests.fixtures.langchain import get_embeddings
 
 class CustomChromaContainer(ChromaContainer):
     def _healthcheck(self):
-        time.sleep(3)
+        time.sleep(2)
 
 @pytest.fixture(scope="session")
 def chroma_container() -> Generator[ChromaContainer, Any, None]:
