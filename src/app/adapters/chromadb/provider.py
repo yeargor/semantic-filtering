@@ -1,8 +1,11 @@
+import os
+
 import chromadb
 from chromadb import ClientAPI, Embeddings
 from dishka import Provider, provide, Scope
 from langchain_chroma import Chroma
 
+from src.app.adapters.chromadb.config import ChromaConfig
 from src.app.adapters.chromadb.gateway import ChromaRecipeGateway
 from src.app.application.protocols.database import AbstractChromaRecipeGateway
 from src.app.application.protocols.retriever import AbstractRecipeRetriever
@@ -10,8 +13,18 @@ from src.app.application.protocols.retriever import AbstractRecipeRetriever
 
 class ChromaProvider(Provider):
     @provide(scope=Scope.APP)
-    def get_chroma_client(self) -> ClientAPI:
-        return chromadb.HttpClient(host='localhost', port=8000)
+    def get_config(self) -> ChromaConfig:
+        return ChromaConfig(
+            os.getenv("CHROMA_HOST","localhost"),
+            int(os.getenv("CHROMA_PORT",8000))
+        )
+
+    @provide(scope=Scope.APP)
+    def get_chroma_client(self, config: ChromaConfig) -> ClientAPI:
+        return chromadb.HttpClient(
+            host=config.host,
+            port=config.port
+        )
 
     @provide(scope=Scope.APP, provides=Chroma)
     def get_recipe_vector_store(

@@ -1,0 +1,1 @@
+pytest_plugins = ["src.app.tests.fixtures.db", "src.app.tests.fixtures.broker"]

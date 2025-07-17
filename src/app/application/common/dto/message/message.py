@@ -1,5 +1,4 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, Field
 
-@dataclass
-class MessageDTO:
-    data: str
+class MessageDTO(BaseModel):
+    data: str = Field(title="Search Query", description="The natural language query for semantic search.")
