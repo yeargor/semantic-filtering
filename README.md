@@ -18,7 +18,7 @@ Provide following variables: \
 `GOOGLE_APPLICATION_CREDENTIALS` - path to your json file \
 `GCP_LOCATION` - us-central1 _(default)_ \
 `GCP_PROJECT` - "project_id" from json file \
-`KAFKA_TOPICS` - should include topic that will be autocreated by Debezium connector 
+`KAFKA_TOPICS` - should include topic that will be autocreated by Debezium connector, it will be `recipe-updates.public.recipe` topic by default 
 
 Configure your environment variables by creating a **`.env`** file based on **`.env.template`**. 
 
