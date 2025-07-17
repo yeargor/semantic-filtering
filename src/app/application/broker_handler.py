@@ -9,18 +9,14 @@ class RecipeHandler:
     ):
         self.gateway = gateway
 
-    def handle_recipe_update(
+    async def handle_recipe_update(
             self,
             recipe_event: RecipeEvent
     ):
-        print(f"Received recipe_event in application: {recipe_event} \n")
         match recipe_event.operation_type:
             case OperationType.CREATE:
-                print("c was called")
-                self.gateway.create_recipe(recipe_event.body)
+                await self.gateway.create_recipe(recipe_event.body)
             case OperationType.UPDATE:
-                print("u was called")
                 self.gateway.update_recipe(recipe_event.id, recipe_event.body)
             case OperationType.DELETE:
-                print("d was called")
                 self.gateway.delete_recipe(recipe_event.id)

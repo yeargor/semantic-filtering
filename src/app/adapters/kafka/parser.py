@@ -29,11 +29,9 @@ def parse_message(message: ConsumerRecord) -> RecipeEvent:
         difficulty=Difficulty[recipe_data['difficulty'].upper()],
         cuisine=Cuisine[recipe_data['cuisine'].upper()]
     )
-    print(f"Recipe: {recipe}")
     recipe_event = RecipeEvent(
         id=key_data['id'],
         operation_type=operation_type,
         body=recipe,
     )
-    print(f"Parsed recipe event: {recipe_event}")
     return recipe_event

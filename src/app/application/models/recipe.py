@@ -3,13 +3,13 @@ from enum import Enum
 from typing import List
 
 class Difficulty(str, Enum):
-    EASY = "easy"
-    MEDIUM = "medium"
-    HARD = "hard"
+    EASY = "Easy"
+    MEDIUM = "Medium"
+    HARD = "Hard"
 
 class Cuisine(str, Enum):
-    ITALIAN="italian"
-    FRENCH="french"
+    ITALIAN="Italian"
+    FRENCH="French"
 
 @dataclass
 class Recipe:
