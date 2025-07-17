@@ -26,7 +26,6 @@ class KafkaConsumer(AbstractConsumer):
     async def consume(self):
         try:
             async for message in self.consumer:
-                print(f'{message} \n')
                 recipe_event = parse_message(message)
                 await self.handler.handle_recipe_update(recipe_event)
         except Exception as e:
