@@ -98,7 +98,6 @@ def run_migrations_online() -> None:
     and associate the connection with the context.
     """
     connection: Connection | None = config.attributes.get("connection", None)
-    print("Connection url password:", connection.engine.url.password)
     match connection:
         case None:
             engine = setup_engine()
