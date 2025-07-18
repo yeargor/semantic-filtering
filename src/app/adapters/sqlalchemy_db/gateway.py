@@ -18,7 +18,7 @@ class RecipeSqlGateway(AbstractSqlRecipeGateway):
         except IntegrityError as e:
             raise GatewayError(f"Error occurred while creating recipe: {e}") from e
 
-    async def find_all(self, filters: RecipeFilter):
+    async def find_all(self, filters: RecipeFilter) -> list[Recipe]:
         stmt = select(Recipe)
         if filters.include:
             include = [i.lower() for i in filters.include]

@@ -8,6 +8,7 @@ from src.app.adapters.kafka.consumer import KafkaConsumer
 from src.app.application.broker_handler import RecipeHandler
 from src.app.application.protocols.consumer import AbstractConsumer
 
+
 class KafkaProvider(Provider):
     @provide(scope=Scope.APP, provides=ConsumerConfig)
     def get_config(self) -> ConsumerConfig:

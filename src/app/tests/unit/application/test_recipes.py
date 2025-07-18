@@ -7,6 +7,7 @@ from src.app.application.recipes import new_recipe, find_recipe_by_id, get_filte
 from src.app.tests.mocks.gateway import RecipeSqlGatewayMock
 from src.app.tests.mocks.uow import UowMock
 
+
 @pytest.fixture
 def recipes() -> list[Recipe]:
     recipes: list[Recipe] = [

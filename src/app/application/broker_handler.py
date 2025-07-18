@@ -2,6 +2,7 @@ from src.app.application.common.dto.recipe.recipe import RecipeEvent
 from src.app.application.common.enums import OperationType
 from src.app.application.protocols.database import AbstractChromaRecipeGateway
 
+
 class RecipeHandler:
     def __init__(
             self,

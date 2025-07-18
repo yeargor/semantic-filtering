@@ -14,6 +14,7 @@ from src.app.application.recipes import new_recipe, find_recipe_by_id, update_re
 
 recipe_router = APIRouter(prefix="/recipe")
 
+
 @recipe_router.post('',tags=["create"])
 @inject
 async def create(

@@ -14,7 +14,6 @@ def parse_message(message: ConsumerRecord) -> RecipeEvent:
     operation_type = OperationType(data['op'])
     recipe_data = data['after']
 
-    print(f"data from parser: type: {operation_type} \t data: {recipe_data}")
 
     if operation_type == OperationType.DELETE:
         return RecipeEvent(
