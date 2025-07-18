@@ -3,6 +3,7 @@ import pytest
 from src.app.application.broker_handler import RecipeHandler
 from src.app.tests.mocks.gateway import RecipeChromaGatewayMock
 
+
 @pytest.fixture()
 def chroma_gateway_mock() -> RecipeChromaGatewayMock:
     return RecipeChromaGatewayMock()

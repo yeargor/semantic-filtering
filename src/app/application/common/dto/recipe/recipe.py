@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from src.app.application.common.enums import OperationType
 from src.app.application.models.recipe import Difficulty, Cuisine, Recipe
 
+
 class RecipeDto(BaseModel):
     title: str = Field(title="Recipe Title", description="The name of the recipe.")
     ingredients: List[str] = Field(title="Ingredients List", description="A list of ingredients required for the recipe.")

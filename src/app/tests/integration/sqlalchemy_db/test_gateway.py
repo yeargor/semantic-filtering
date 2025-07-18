@@ -6,6 +6,7 @@ from src.app.adapters.sqlalchemy_db.gateway import RecipeSqlGateway
 from src.app.application.common.dto.recipe.recipe import RecipeFilter
 from src.app.application.models.recipe import Recipe, Cuisine, Difficulty
 
+
 @pytest.fixture
 def recipes() -> list[Recipe]:
     recipes: list[Recipe] = [

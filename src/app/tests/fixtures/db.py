@@ -46,7 +46,6 @@ async def template_db_engine(postgres: PostgresContainer) -> AsyncGenerator[Asyn
     async with engine.connect() as connection:
         await connection.run_sync(run_migrations)
 
-    # Connections have to be disposed to allow to use the database as a template
     await engine.dispose()
     yield engine
     await engine.dispose()

@@ -7,6 +7,7 @@ from src.app.adapters.kafka.consumer import KafkaConsumer
 from src.app.application.broker_handler import RecipeHandler
 from src.app.tests.mocks.gateway import RecipeChromaGatewayMock
 
+
 async def test_handler_receives_create_event_recipe_created(
         kafka_producer: AIOKafkaProducer,
         kafka_consumer: KafkaConsumer,

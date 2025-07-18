@@ -4,6 +4,7 @@ from typing import List, Any
 from src.app.application.common.dto.recipe.recipe import RecipeFilter
 from src.app.application.models.recipe import Recipe
 
+
 class AbstractChromaRecipeGateway(ABC):
     @abstractmethod
     async def search(self, query: str) -> List[Any]:
@@ -31,7 +32,7 @@ class AbstractSqlRecipeGateway(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def find_all(self, filters: RecipeFilter):
+    async def find_all(self, filters: RecipeFilter) -> List[Recipe]:
         raise NotImplementedError
 
     @abstractmethod

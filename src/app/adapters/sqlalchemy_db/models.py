@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import UUID, ENUM, ARRAY
 
 from src.app.application.models.recipe import Cuisine, Difficulty, Recipe
 
+
 metadata_obj = MetaData()
 mapper_registry = registry()
 

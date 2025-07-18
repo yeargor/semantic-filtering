@@ -1,4 +1,4 @@
-import time
+import asyncio
 import uuid
 
 import pytest
@@ -12,20 +12,20 @@ from src.app.tests.fixtures.chroma import vector_store
 @pytest.fixture
 def recipes() -> list[Recipe]:
     first_recipe = Recipe(
-        title="First recipe",
-        ingredients=["onion", "pepper"],
-        instructions="Some instructions",
+        title="Italian recipe",
+        ingredients=["pasta", "pepperoni"],
+        instructions="It's quite fast",
         cooking_time=0,
-        difficulty=Difficulty.EASY,
-        cuisine=Cuisine.FRENCH
+        difficulty=Difficulty.HARD,
+        cuisine=Cuisine.ITALIAN
     )
     second_recipe = Recipe(
-        title="Second recipe",
+        title="simple italian recipe",
         ingredients=["cheese", "butter"],
         instructions="Some instructions",
         cooking_time=0,
         difficulty=Difficulty.EASY,
-        cuisine=Cuisine.FRENCH
+        cuisine=Cuisine.ITALIAN
     )
     first_recipe.id = str(uuid.uuid4())
     second_recipe.id = str(uuid.uuid4())
@@ -39,8 +39,10 @@ async def test_semantic_search_recipe_recipes_found(
     gateway = ChromaRecipeGateway(vector_store,get_retriever)
     for recipe in recipes:
         await gateway.create_recipe(recipe)
-    recipes = await gateway.search("onion in ingredients")
-    assert "onion" in recipes[0].ingredients
+    asyncio.sleep(8)
+    recipes = await gateway.search("hard italian recipe with pepperoni")
+    assert "pepperoni" in recipes[0].ingredients
+    assert recipes[0].difficulty == Difficulty.HARD
 
 async def test_semantic_search_recipe_recipes_filtered_correctly(
         vector_store: Chroma,
@@ -50,5 +52,5 @@ async def test_semantic_search_recipe_recipes_filtered_correctly(
     gateway = ChromaRecipeGateway(vector_store,get_retriever)
     for recipe in recipes:
         await gateway.create_recipe(recipe)
-    recipes = await gateway.search("without onion in ingredients")
-    assert "onion" not in recipes[0].ingredients
+    recipes = await gateway.search("simple italian recipe with cheese")
+    assert "pepperoni" not in recipes[0].ingredients

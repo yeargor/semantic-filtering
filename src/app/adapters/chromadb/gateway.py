@@ -23,7 +23,7 @@ class ChromaRecipeGateway(AbstractChromaRecipeGateway):
         recipes = [to_recipe(doc) for doc in documents_list]
         return recipes
 
-    async def create_recipe(self, recipe: Recipe):
+    async def create_recipe(self, recipe: Recipe) -> str:
         recipe_document = from_recipe(recipe)
         langchain_document = Document(
             page_content=recipe_document.content,
