@@ -39,7 +39,7 @@ async def test_semantic_search_recipe_recipes_found(
     gateway = ChromaRecipeGateway(vector_store,get_retriever)
     for recipe in recipes:
         await gateway.create_recipe(recipe)
-    asyncio.sleep(8)
+    await asyncio.sleep(3)
     recipes = await gateway.search("hard italian recipe with pepperoni")
     assert "pepperoni" in recipes[0].ingredients
     assert recipes[0].difficulty == Difficulty.HARD
