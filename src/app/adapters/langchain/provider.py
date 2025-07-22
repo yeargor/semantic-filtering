@@ -1,11 +1,11 @@
-from chromadb import Embeddings
 from dishka import Provider, provide, Scope
 from langchain_chroma import Chroma
 from langchain_google_vertexai import ChatVertexAI
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.retrievers.self_query.base import SelfQueryRetriever
+from langchain_core.embeddings import Embeddings
 
-from src.app.adapters.langchain.config import LLMConfig, load_config
+from src.app.adapters.langchain.config import load_config
 from src.app.adapters.langchain.recipe_meta import get_document_content_description, \
     get_metadata_field_info
 from src.app.application.protocols.llm import LLM

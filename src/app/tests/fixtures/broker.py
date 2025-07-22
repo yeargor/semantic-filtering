@@ -12,7 +12,6 @@ def kafka_container() -> Generator[KafkaContainer, Any, None]:
     with KafkaContainer() as kafka:
         yield kafka
 
-
 @pytest.fixture(scope="session")
 def kafka_topic(kafka_container) -> None:
     topic_name = "topic"

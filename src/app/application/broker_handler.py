@@ -18,6 +18,6 @@ class RecipeHandler:
             case OperationType.CREATE:
                 await self.gateway.create_recipe(recipe_event.body)
             case OperationType.UPDATE:
-                self.gateway.update_recipe(recipe_event.id, recipe_event.body)
+                await self.gateway.update_recipe(recipe_event.id, recipe_event.body)
             case OperationType.DELETE:
-                self.gateway.delete_recipe(recipe_event.id)
+                await self.gateway.delete_recipe(recipe_event.id)
