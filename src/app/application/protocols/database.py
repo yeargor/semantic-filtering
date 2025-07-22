@@ -15,11 +15,11 @@ class AbstractChromaRecipeGateway(ABC):
         pass
 
     @abstractmethod
-    def update_recipe(self, recipe_id: str, recipe: Recipe) -> None:
+    async def update_recipe(self, recipe_id: str, recipe: Recipe) -> None:
         pass
 
     @abstractmethod
-    def delete_recipe(self, recipe_id: str) -> None:
+    async def delete_recipe(self, recipe_id: str) -> None:
         pass
 
 class AbstractSqlRecipeGateway(ABC):

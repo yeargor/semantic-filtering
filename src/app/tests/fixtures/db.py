@@ -22,22 +22,18 @@ class PostgresDbManager:
         async with self._engine.connect() as connection:
             await connection.execute(text(f'DROP DATABASE "{database}"'))
 
-
 @pytest.fixture(scope="session")
 def postgres() -> Generator[PostgresContainer, None, None]:
     with PostgresContainer("postgres:17.5", dbname="template-db", driver="asyncpg") as postgres:
         yield postgres
 
-
 def get_alembic_config() -> AlembicConfig:
     return AlembicConfig(file_="alembic.ini")
-
 
 def run_migrations(connection: Connection) -> None:
     alembic_config = get_alembic_config()
     alembic_config.attributes["connection"] = connection
     alembic.command.upgrade(config=alembic_config, revision="head")
-
 
 @pytest.fixture(scope="session")
 async def template_db_engine(postgres: PostgresContainer) -> AsyncGenerator[AsyncEngine, None]:
@@ -49,7 +45,6 @@ async def template_db_engine(postgres: PostgresContainer) -> AsyncGenerator[Asyn
     await engine.dispose()
     yield engine
     await engine.dispose()
-
 
 @pytest.fixture()
 async def test_postgres_url(
@@ -77,13 +72,11 @@ async def test_postgres_url(
     await postgres_db_manager.drop_database(database_name)
     await postgres_engine.dispose()
 
-
 @pytest.fixture()
 async def engine(test_postgres_url: str) -> AsyncGenerator[AsyncEngine, None]:
     engine = create_async_engine(test_postgres_url)
     yield engine
     await engine.dispose()
-
 
 @pytest.fixture()
 async def session_factory(engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
@@ -94,7 +87,6 @@ async def session_factory(engine: AsyncEngine) -> async_sessionmaker[AsyncSessio
         expire_on_commit=False,
         class_=AsyncSession,
     )
-
 
 @pytest.fixture()
 async def session(session_factory: async_sessionmaker[AsyncSession]) -> AsyncGenerator[AsyncSession, None]:
