@@ -1,9 +1,11 @@
 import os
 
 import chromadb
-from chromadb import ClientAPI, Embeddings
+from chromadb import ClientAPI, AsyncClientAPI
+from chromadb.api.models.AsyncCollection import AsyncCollection
 from dishka import Provider, provide, Scope
 from langchain_chroma import Chroma
+from langchain_core.embeddings import Embeddings
 
 from src.app.adapters.chromadb.config import ChromaConfig
 from src.app.adapters.chromadb.gateway import ChromaRecipeGateway
@@ -17,6 +19,22 @@ class ChromaProvider(Provider):
         return ChromaConfig(
             os.getenv("CHROMA_HOST","localhost"),
             int(os.getenv("CHROMA_PORT",8000))
+        )
+
+    @provide(scope=Scope.APP)
+    async def get_async_chroma_client(self, config: ChromaConfig) -> AsyncClientAPI:
+        return await chromadb.AsyncHttpClient(
+            config.host,
+            config.port
+        )
+
+    @provide(scope=Scope.APP)
+    async def get_recipe_async_collection(
+            self,
+            client: AsyncClientAPI
+    ) -> AsyncCollection:
+        return await client.get_or_create_collection(
+            name="recipe"
         )
 
     @provide(scope=Scope.APP)
@@ -41,10 +59,12 @@ class ChromaProvider(Provider):
     @provide(scope=Scope.APP, provides=AbstractChromaRecipeGateway)
     def get_chroma_recipe_gateway(
             self,
-            vector_store: Chroma,
-            retriever: AbstractRecipeRetriever
+            collection: AsyncCollection,
+            retriever: AbstractRecipeRetriever,
+            embeddings: Embeddings
     ) -> ChromaRecipeGateway:
         return ChromaRecipeGateway(
-            vector_store,
-            retriever
+            collection,
+            retriever,
+            embeddings,
         )
